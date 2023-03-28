@@ -1,23 +1,29 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
+import colors from './src/assets/colors';
+
+import { RegistrationScreen } from './src/components/screens/RegistrationScreen';
+import { LoginScreen } from './src/components/screens/LoginScreen';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Open up App. Hello world</Text>
-      <StatusBar style="auto" />
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <LoginScreen />
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: 'white',
+    backgroundColor: colors.primaryBg,
+    justifyContent: 'flex-end',
   },
 });
