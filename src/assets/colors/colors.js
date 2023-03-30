@@ -1,9 +1,9 @@
 export default colors = {
-  primaryBg: '#FFFFFF',
-  secondaryBg: '#F6F6F6',
-  border: '#E8E8E8',
-  accent: '#FF6C00',
-  primaryText: '#212121',
-  navigation: '#1B4371',
-  secondaryText: '#BDBDBD',
+  PRIMARY_BG: '#FFFFFF',
+  SECONDARY_BG: '#F6F6F6',
+  BORDER_COLOR: '#E8E8E8',
+  ACCENT_COLOR: '#FF6C00',
+  PRIMARY_TEXT_COLOR: '#212121',
+  SECONDARY_TEXT_COLOR: '#BDBDBD',
+  NAV_TEXT_COLOR: '#1B4371',
 };

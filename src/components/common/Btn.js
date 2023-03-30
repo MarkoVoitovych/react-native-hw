@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
+import { TextRobotoRegular } from './TextRobotoRegular';
 import colors from '../../assets/colors';
 
 export const Btn = (props) => {
@@ -13,7 +14,7 @@ export const Btn = (props) => {
       style={styles.button}
       onPress={onFormSubmit}
     >
-      <Text style={styles.title}>{title}</Text>
+      <TextRobotoRegular style={styles.title}>{title}</TextRobotoRegular>
     </Pressable>
   );
 };
@@ -22,16 +23,15 @@ const styles = StyleSheet.create({
   button: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.accent,
-    color: colors.primaryBg,
+    backgroundColor: colors.ACCENT_COLOR,
+    color: colors.PRIMARY_BG,
     height: 51,
     borderRadius: 100,
     marginTop: 43,
   },
   title: {
     fontSize: 16,
-    color: colors.primaryBg,
-    fontWeight: 400,
+    color: colors.PRIMARY_BG,
     lineHeight: 19,
   },
 });

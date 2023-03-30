@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   ImageBackground,
   Dimensions,
@@ -10,25 +9,19 @@ import {
   Keyboard,
 } from 'react-native';
 
-import { smallDevice } from '../../utils/defaults';
-import { Btn } from '../common/Btn';
-import { Input } from '../common/Input';
-import { Password } from '../common/Password';
-import { AddAvatar } from '../common/AddAvatar';
+import colors from '../assets/colors';
+import { smallDevice } from '../utils/defaults';
+import { common } from '../components/common';
 
-import colors from '../../assets/colors';
-
+const { TextRobotoMedium, TextRobotoRegular, Btn, Input, Password } = common;
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
-
 const initFormState = {
-  avatarUrl: '',
-  login: '',
   email: '',
   password: '',
 };
 
-export const RegistrationScreen = () => {
+export const LoginScreen = () => {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [form, setForm] = useState(initFormState);
 
@@ -49,23 +42,15 @@ export const RegistrationScreen = () => {
   return (
     <ImageBackground
       style={styles.backgroundImage}
-      source={require('../../assets/images/PhotoBG2x.jpg')}
+      source={require('../assets/images/PhotoBG2x.jpg')}
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <View style={styles.form}>
-          <AddAvatar form={form} setForm={setForm} />
           <View style={styles.titleWrapper}>
-            <Text style={styles.title}>Registration</Text>
+            <TextRobotoMedium style={styles.title}>Login</TextRobotoMedium>
           </View>
-          <Input
-            name={'login'}
-            value={form.login}
-            placeholder="Login"
-            onInputChange={handleInputChange}
-            onKeybordToggle={handleKeybordToggle}
-          />
           <Input
             name={'email'}
             value={form.email}
@@ -81,13 +66,13 @@ export const RegistrationScreen = () => {
             onKeybordToggle={handleKeybordToggle}
           />
           {!isKeyboardShown && (
-            <Btn title="Sign up" onFormSubmit={handleFormSubmit} form={form} />
+            <Btn title="Log in" onFormSubmit={handleFormSubmit} form={form} />
           )}
           {!isKeyboardShown && (
             <View style={styles.navWrapper}>
-              <Text style={styles.navLink}>
-                {'Already have an account? Log in'}
-              </Text>
+              <TextRobotoRegular style={styles.navLink}>
+                {"Don't have an account? Register"}
+              </TextRobotoRegular>
             </View>
           )}
         </View>
@@ -105,21 +90,20 @@ const styles = StyleSheet.create({
   },
   form: {
     paddingHorizontal: 16,
-    backgroundColor: colors.primaryBg,
+    backgroundColor: colors.PRIMARY_BG,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    paddingBottom: deviceHeight > smallDevice ? 78 : 32,
+    paddingBottom: deviceHeight > smallDevice ? 144 : 32,
   },
   title: {
-    color: colors.primaryText,
+    color: colors.PRIMARY_TEXT_COLOR,
     fontSize: 30,
     lineHeight: 35,
-    fontWeight: 500,
   },
   titleWrapper: {
     alignItems: 'center',
     marginBottom: 16,
-    marginTop: deviceHeight > smallDevice ? 92 : 72,
+    marginTop: 32,
   },
   navWrapper: {
     justifyContent: 'center',
@@ -127,9 +111,8 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   navLink: {
-    color: colors.navigation,
+    color: colors.NAV_TEXT_COLOR,
     fontSize: 16,
     lineHeight: 19,
-    fontWeight: 400,
   },
 });
