@@ -33,15 +33,18 @@ export default function App() {
     })();
   }, []);
 
-  return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <LoginScreen />
-      </View>
-    </TouchableWithoutFeedback>
-  );
+  if (!isReady) {
+    return null;
+  } else {
+    return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <LoginScreen />
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  }
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
