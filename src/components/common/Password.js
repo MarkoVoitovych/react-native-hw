@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { StyleSheet, TextInput, View, Pressable, Text } from 'react-native';
+import { StyleSheet, TextInput, View, Pressable } from 'react-native';
 import colors from '../../assets/colors';
+import { TextRobotoRegular } from './TextRobotoRegular';
 
 export const Password = (props) => {
   const { placeholder, onInputChange, onKeybordToggle, name, value } = props;
@@ -9,29 +10,21 @@ export const Password = (props) => {
 
   return (
     <View style={styles.passwordWrapper}>
-      {showPassword && (
-        <Pressable
-          style={styles.showWrapper}
-          onPress={() => setShowPassword(false)}
-        >
-          <Text style={styles.showMsg}>Show</Text>
-        </Pressable>
-      )}
-      {!showPassword && (
-        <Pressable
-          style={styles.showWrapper}
-          onPress={() => setShowPassword(true)}
-        >
-          <Text style={styles.showMsg}>Hide</Text>
-        </Pressable>
-      )}
+      <Pressable
+        style={styles.showWrapper}
+        onPress={() => setShowPassword((prev) => !prev)}
+      >
+        <TextRobotoRegular style={styles.showMsg}>
+          {!showPassword ? 'Hide' : 'Show'}
+        </TextRobotoRegular>
+      </Pressable>
       <TextInput
         style={{
           ...styles.input,
-          borderColor: isOnFocus ? colors.accent : colors.border,
+          borderColor: isOnFocus ? colors.ACCENT_COLOR : colors.BORDER_COLOR,
         }}
         placeholder={placeholder}
-        placeholderTextColor={colors.secondaryText}
+        placeholderTextColor={colors.SECONDARY_TEXT_COLOR}
         secureTextEntry={showPassword}
         onFocus={() => {
           onKeybordToggle(true);
@@ -43,8 +36,7 @@ export const Password = (props) => {
         }}
         onChangeText={(text) => onInputChange({ name, value: text })}
         value={value}
-        autoComplete={'off'}
-        autoCorrect={false}
+        textContentType={'password'}
       />
     </View>
   );
@@ -59,13 +51,12 @@ const styles = StyleSheet.create({
     top: 16,
   },
   showMsg: {
-    color: colors.navigation,
+    color: colors.NAV_TEXT_COLOR,
     fontSize: 16,
     lineHeight: 19,
-    fontWeight: 400,
   },
   input: {
-    backgroundColor: colors.secondaryBg,
+    backgroundColor: colors.SECONDARY_BG,
     height: 50,
     padding: 16,
 
@@ -73,7 +64,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 16,
     lineHeight: 18,
-    color: colors.primaryText,
-    borderColor: colors.border,
+    color: colors.PRIMARY_TEXT_COLOR,
+    borderColor: colors.BORDER_COLOR,
   },
 });

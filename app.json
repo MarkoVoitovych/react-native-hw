@@ -10,10 +10,12 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
+    "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "jsEngine": "jsc",
       "adaptiveIcon": {
         "backgroundColor": "#ffffff"
       }

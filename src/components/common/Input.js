@@ -9,10 +9,10 @@ export const Input = (props) => {
     <TextInput
       style={{
         ...styles.input,
-        borderColor: isOnFocus ? colors.accent : colors.border,
+        borderColor: isOnFocus ? colors.ACCENT_COLOR : colors.BORDER_COLOR,
       }}
       placeholder={placeholder}
-      placeholderTextColor={colors.secondaryText}
+      placeholderTextColor={colors.SECONDARY_TEXT_COLOR}
       onFocus={() => {
         onKeybordToggle(true);
         setIsOnFocus(true);
@@ -23,15 +23,14 @@ export const Input = (props) => {
       }}
       onChangeText={(text) => onInputChange({ name, value: text })}
       value={value}
-      autoComplete={'off'}
-      autoCorrect={false}
+      keyboardType={name === 'email' ? 'email-address' : 'default'}
     />
   );
 };
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: colors.secondaryBg,
+    backgroundColor: colors.SECONDARY_BG,
     height: 50,
     padding: 16,
     marginTop: 16,
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontSize: 16,
     lineHeight: 18,
-    color: colors.primaryText,
-    borderColor: colors.border,
+    color: colors.PRIMARY_TEXT_COLOR,
+    borderColor: colors.BORDER_COLOR,
   },
 });

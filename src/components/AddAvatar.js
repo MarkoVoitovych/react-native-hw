@@ -1,6 +1,8 @@
 import { View, Image, Pressable, StyleSheet, Dimensions } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
+import colors from '../assets/colors';
+
 const deviceWidth = Dimensions.get('window').width;
 
 export const AddAvatar = (props) => {
@@ -30,7 +32,7 @@ export const AddAvatar = (props) => {
           onPress={pickImage}
         >
           <Image
-            source={require('../../assets/images/addAvatar.png')}
+            source={require('../assets/images/addAvatar.png')}
             style={styles.addAvatarBtnImg}
           />
         </Pressable>
@@ -45,7 +47,7 @@ export const AddAvatar = (props) => {
           onPress={() => setForm((prev) => ({ ...prev, avatarUrl: '' }))}
         >
           <Image
-            source={require('../../assets/images/removeAvatar.png')}
+            source={require('../assets/images/removeAvatar.png')}
             style={styles.addAvatarBtnImg}
           />
         </Pressable>
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     right: deviceWidth / 2 - 60,
     width: 120,
     height: 120,
-    backgroundColor: colors.secondaryBg,
+    backgroundColor: colors.SECONDARY_BG,
     borderRadius: 16,
   },
   avatarImg: {
