@@ -3,16 +3,17 @@ import {
   View,
   StyleSheet,
   ImageBackground,
-  Dimensions,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
   Pressable,
+  useWindowDimensions,
 } from 'react-native';
 
 import colors from '../../assets/colors';
 import smallDevice from '../../utils/smallDeviceDimens';
 import common from '../../components/common';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const {
   TextRobotoMedium,
@@ -23,9 +24,6 @@ const {
   MainContainer,
 } = common;
 
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-
 const initFormState = {
   email: '',
   password: '',
@@ -34,6 +32,8 @@ const initFormState = {
 export const LoginScreen = ({ navigation }) => {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [form, setForm] = useState(initFormState);
+
+  const { width: deviceWidth, height: deviceHeight } = useWindowDimensions();
 
   const handleInputChange = ({ name, value }) => {
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -50,43 +50,58 @@ export const LoginScreen = ({ navigation }) => {
   return (
     <MainContainer>
       <ImageBackground
-        style={styles.backgroundImage}
+        style={{
+          ...styles.backgroundImage,
+          height: deviceHeight,
+          width: deviceWidth,
+        }}
         source={require('../../assets/images/PhotoBG2x.jpg')}
       >
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-          <View style={styles.form}>
-            <View style={styles.titleWrapper}>
-              <TextRobotoMedium style={styles.title}>Login</TextRobotoMedium>
-            </View>
-            <Input
-              name={'email'}
-              value={form.email}
-              placeholder="E-mail address"
-              onInputChange={handleInputChange}
-              onKeybordToggle={handleKeybordToggle}
-            />
-            <Password
-              name={'password'}
-              value={form.password}
-              placeholder="Password"
-              onInputChange={handleInputChange}
-              onKeybordToggle={handleKeybordToggle}
-            />
-            {!isKeyboardShown && (
-              <Btn title="Log in" onFormSubmit={handleFormSubmit} form={form} />
-            )}
-            {!isKeyboardShown && (
-              <Pressable
-                style={styles.navWrapper}
-                onPress={() => navigation.navigate('Registration')}
-              >
-                <TextRobotoRegular style={styles.navLink}>
-                  {"Don't have an account? Register"}
-                </TextRobotoRegular>
-              </Pressable>
-            )}
+          <View
+            style={{
+              ...styles.form,
+              paddingBottom: deviceHeight > smallDevice.height ? 144 : 32,
+            }}
+          >
+            <ScrollView>
+              <View style={styles.titleWrapper}>
+                <TextRobotoMedium style={styles.title}>Login</TextRobotoMedium>
+              </View>
+              <Input
+                name={'email'}
+                value={form.email}
+                placeholder="E-mail address"
+                onInputChange={handleInputChange}
+                onKeybordToggle={handleKeybordToggle}
+              />
+              <Password
+                name={'password'}
+                value={form.password}
+                placeholder="Password"
+                onInputChange={handleInputChange}
+                onKeybordToggle={handleKeybordToggle}
+              />
+              {!isKeyboardShown && (
+                <Btn
+                  title="Log in"
+                  onFormSubmit={handleFormSubmit}
+                  form={form}
+                />
+              )}
+              {!isKeyboardShown && (
+                <Pressable
+                  style={styles.navWrapper}
+                  onPress={() => navigation.navigate('Registration')}
+                >
+                  <TextRobotoRegular style={styles.navLink}>
+                    {"Don't have an account? Register"}
+                  </TextRobotoRegular>
+                </Pressable>
+              )}
+            </ScrollView>
           </View>
         </KeyboardAvoidingView>
       </ImageBackground>
@@ -97,8 +112,6 @@ export const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   backgroundImage: {
     resizeMode: 'cover',
-    height: deviceHeight,
-    width: deviceWidth,
     justifyContent: 'flex-end',
   },
   form: {
@@ -106,7 +119,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.PRIMARY_BG,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    paddingBottom: deviceHeight > smallDevice.height ? 144 : 32,
   },
   title: {
     color: colors.PRIMARY_TEXT_COLOR,

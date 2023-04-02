@@ -3,11 +3,11 @@ import {
   View,
   StyleSheet,
   ImageBackground,
-  Dimensions,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
   Pressable,
+  useWindowDimensions,
 } from 'react-native';
 
 import colors from '../../assets/colors';
@@ -24,9 +24,6 @@ const {
   MainContainer,
 } = common;
 
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
-
 const initFormState = {
   avatarUrl: '',
   login: '',
@@ -37,6 +34,8 @@ const initFormState = {
 export const RegistrationScreen = ({ navigation }) => {
   const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [form, setForm] = useState(initFormState);
+
+  const { width: deviceWidth, height: deviceHeight } = useWindowDimensions();
 
   const handleInputChange = ({ name, value }) => {
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -53,15 +52,29 @@ export const RegistrationScreen = ({ navigation }) => {
   return (
     <MainContainer>
       <ImageBackground
-        style={styles.backgroundImage}
+        style={{
+          ...styles.backgroundImage,
+          height: deviceHeight,
+          width: deviceWidth,
+        }}
         source={require('../../assets/images/PhotoBG2x.jpg')}
       >
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-          <View style={styles.form}>
+          <View
+            style={{
+              ...styles.form,
+              paddingBottom: deviceHeight > smallDevice.height ? 78 : 32,
+            }}
+          >
             <AddAvatar form={form} setForm={setForm} />
-            <View style={styles.titleWrapper}>
+            <View
+              style={{
+                ...styles.titleWrapper,
+                marginTop: deviceHeight > smallDevice.height ? 92 : 72,
+              }}
+            >
               <TextRobotoMedium style={styles.title}>
                 Registration
               </TextRobotoMedium>
@@ -114,8 +127,6 @@ export const RegistrationScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   backgroundImage: {
     resizeMode: 'cover',
-    height: deviceHeight,
-    width: deviceWidth,
     justifyContent: 'flex-end',
   },
   form: {
@@ -123,7 +134,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.PRIMARY_BG,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    paddingBottom: deviceHeight > smallDevice.height ? 78 : 32,
   },
   title: {
     color: colors.PRIMARY_TEXT_COLOR,
@@ -133,7 +143,6 @@ const styles = StyleSheet.create({
   titleWrapper: {
     alignItems: 'center',
     marginBottom: 16,
-    marginTop: deviceHeight > smallDevice.height ? 92 : 72,
   },
   navWrapper: {
     justifyContent: 'center',
