@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
-import * as Font from 'expo-font';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
 
-import fonts from './src/assets/fonts/fonts';
-import colors from './src/assets/colors';
-import { RegistrationScreen } from './src/screens/RegistrationScreen';
-import { LoginScreen } from './src/screens/LoginScreen';
+import { loadFonts } from './src/utils/loadFonts';
+import { RegistrationScreen } from './src/screens/auth/RegistrationScreen';
+import { LoginScreen } from './src/screens/auth/LoginScreen';
+import { HomeScreen } from './src/screens/main/HomeScreen';
 
 SplashScreen.preventAutoHideAsync();
+const Stack = createStackNavigator();
 
 export default function App() {
   const [isReady, setIsReady] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
-        await (async () => {
-          await Font.loadAsync(fonts);
-        })();
+        await loadFonts();
       } catch (e) {
         Alert.alert(e.message);
       } finally {
@@ -37,18 +32,25 @@ export default function App() {
     return null;
   } else {
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <LoginScreen />
-        </View>
-      </TouchableWithoutFeedback>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Registration">
+          <Stack.Screen
+            name="Registration"
+            component={RegistrationScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.PRIMARY_BG,
-    justifyContent: 'flex-end',
-  },
-});

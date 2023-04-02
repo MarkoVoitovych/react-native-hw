@@ -4,12 +4,14 @@ import { Password } from './Password';
 import { TextRobotoBold } from './TextRobotoBold';
 import { TextRobotoMedium } from './TextRobotoMedium';
 import { TextRobotoRegular } from './TextRobotoRegular';
+import { MainContainer } from './MainContainer';
 
-export const common = {
+export default common = {
   Btn,
   Input,
   Password,
   TextRobotoBold,
   TextRobotoMedium,
   TextRobotoRegular,
+  MainContainer,
 };
