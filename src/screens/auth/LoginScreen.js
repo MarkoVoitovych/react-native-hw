@@ -89,7 +89,7 @@ export const LoginScreen = ({ navigation }) => {
                 <Btn
                   title="Log in"
                   onFormSubmit={handleFormSubmit}
-                  isDisable={isBtnDisable(form)}
+                  // isDisable={isBtnDisable(form)}
                   style={{ marginTop: 43 }}
                 />
               )}

@@ -11,6 +11,7 @@ import {
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
+import * as Location from 'expo-location';
 
 import { CameraScreen } from './CameraScreen';
 import common from '../../components/common';
@@ -23,6 +24,10 @@ const initState = {
   imageUrl: null,
   name: '',
   locality: '',
+  coords: {
+    latitude: '',
+    longitude: '',
+  },
 };
 
 export default CreatePostsScreen = ({ navigation }) => {
@@ -33,28 +38,35 @@ export default CreatePostsScreen = ({ navigation }) => {
   const { imageUrl: photo } = form;
   const { width: deviceWidth, height: deviceHeight } = useWindowDimensions();
 
+  const onFormSubmit = async () => {
+    if (!form.coords.latitude) {
+      const location = await Location.getCurrentPositionAsync();
+      const coords = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+      setForm((prev) => ({
+        ...prev,
+        imageUrl: takenPhoto.uri,
+        coords,
+      }));
+    }
+    // setForm(initState);
+    navigation.navigate('Posts');
+  };
+
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
+      const { status: cameraStatus } =
+        await Camera.requestCameraPermissionsAsync();
+      const { status: locationStatus } =
+        await Location.requestForegroundPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setHasPermission(
+        cameraStatus === 'granted' && locationStatus === 'granted'
+      );
     })();
   }, []);
-
-  if (hasPermission === null) {
-    return (
-      <View>
-        <TextRobotoRegular>No access to camera</TextRobotoRegular>
-      </View>
-    );
-  }
-  if (hasPermission === false) {
-    return (
-      <View>
-        <TextRobotoRegular>No access to camera</TextRobotoRegular>
-      </View>
-    );
-  }
 
   return (
     <MainContainer style={styles.container}>
@@ -63,6 +75,7 @@ export default CreatePostsScreen = ({ navigation }) => {
       >
         <CameraScreen
           cameraStatus={cameraStatus}
+          hasPermission={hasPermission}
           photo={form.imageUrl}
           setCameraStatus={setCameraStatus}
           setForm={setForm}
@@ -121,7 +134,7 @@ export default CreatePostsScreen = ({ navigation }) => {
                 let result = await pickImage();
                 setForm((prev) => ({
                   ...prev,
-                  imageUrl: result.assets[0].uri,
+                  imageUrl: result.assets[0].uri || null,
                 }));
               }}
             >
@@ -147,12 +160,13 @@ export default CreatePostsScreen = ({ navigation }) => {
               />
             </View>
             <View style={{ ...styles.inputContanier, marginBottom: 32 }}>
-              <Feather
-                name="map-pin"
-                size={24}
-                color={colors.SECONDARY_TEXT_COLOR}
-                style={{ marginRight: 4 }}
-              />
+              <Pressable style={styles.mapPinWrap}>
+                <Feather
+                  name="map-pin"
+                  size={24}
+                  color={colors.SECONDARY_TEXT_COLOR}
+                />
+              </Pressable>
               <TextInput
                 style={styles.input}
                 value={form.locality}
@@ -165,10 +179,7 @@ export default CreatePostsScreen = ({ navigation }) => {
             </View>
             <Btn
               title={'Publish'}
-              onFormSubmit={() => {
-                setForm(initState);
-                navigation.navigate('Posts');
-              }}
+              onFormSubmit={onFormSubmit}
               isDisable={isBtnDisable(form)}
             />
             <Pressable
@@ -256,5 +267,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     overflow: 'hidden',
     borderRadius: 8,
+  },
+  mapPinWrap: {
+    marginRight: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
