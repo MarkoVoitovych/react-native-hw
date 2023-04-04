@@ -1,10 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 
 import PostsScreen from './PostsScreen';
 import CreatePostsScreen from './CreatePostsScreen';
 import ProfileScreen from './ProfileScreen';
+import CommentsScreen from '../nestedScreens/CommentsScreen';
+import MapScreen from '../nestedScreens/MapScreen';
 import common from '../../components/common';
 import colors from '../../assets/colors';
 
@@ -41,7 +43,10 @@ export const HomeScreen = ({ navigation }) => {
             tabBarIcon: ({ color }) => (
               <Feather name="grid" size={24} color={color} />
             ),
-            title: 'Posts',
+            headerStyle: styles.headerWrap,
+            headerTitleStyle: styles.headerTitle,
+            headerPressColor: colors.ACCENT_COLOR,
+            title: 'Publications',
             headerTitleAlign: 'center',
             headerRight: () => (
               <TouchableOpacity
@@ -64,6 +69,9 @@ export const HomeScreen = ({ navigation }) => {
             tabBarIcon: ({ color }) => (
               <Feather name="plus" size={24} color={color} />
             ),
+            headerStyle: styles.headerWrap,
+            headerTitleStyle: styles.headerTitle,
+            headerPressColor: colors.ACCENT_COLOR,
             title: 'Create publication',
             headerTitleAlign: 'center',
             headerLeft: () => (
@@ -93,7 +101,74 @@ export const HomeScreen = ({ navigation }) => {
             headerShown: false,
           }}
         />
+        <Tabs.Screen
+          name="Comments"
+          component={CommentsScreen}
+          options={{
+            tabBarStyle: {
+              display: 'none',
+            },
+            tabBarItemStyle: { display: 'none' },
+            headerStyle: styles.headerWrap,
+            headerTitleStyle: styles.headerTitle,
+            headerPressColor: colors.ACCENT_COLOR,
+            title: 'Comments',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ paddingLeft: 16 }}
+                onPress={() => navigation.navigate('Posts')}
+              >
+                <MaterialIcons
+                  name="keyboard-backspace"
+                  size={24}
+                  color={colors.PRIMARY_TEXT_COLOR}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="Map"
+          component={MapScreen}
+          options={{
+            tabBarStyle: {
+              display: 'none',
+            },
+            tabBarItemStyle: { display: 'none' },
+            headerStyle: styles.headerWrap,
+            headerTitleStyle: styles.headerTitle,
+            headerPressColor: colors.ACCENT_COLOR,
+            title: 'Map',
+            headerTitleAlign: 'center',
+            headerLeft: () => (
+              <TouchableOpacity
+                style={{ paddingLeft: 16 }}
+                onPress={() => navigation.navigate('Posts')}
+              >
+                <MaterialIcons
+                  name="keyboard-backspace"
+                  size={24}
+                  color={colors.PRIMARY_TEXT_COLOR}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
       </Tabs.Navigator>
     </MainContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  headerWrap: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.SECONDARY_TEXT_COLOR,
+  },
+  headerTitle: {
+    fontFamily: 'roboto-medium',
+    fontSize: 17,
+    lineHeight: 22,
+    color: colors.PRIMARY_TEXT_COLOR,
+  },
+});
