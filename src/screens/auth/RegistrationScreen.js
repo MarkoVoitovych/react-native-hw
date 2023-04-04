@@ -11,9 +11,10 @@ import {
 } from 'react-native';
 
 import colors from '../../assets/colors';
+import common from '../../components/common';
 import smallDevice from '../../utils/smallDeviceDimens';
 import { AddAvatar } from '../../components/AddAvatar';
-import common from '../../components/common';
+import { isBtnDisable } from '../../utils/isBtnDisable';
 
 const {
   TextRobotoMedium,
@@ -104,7 +105,8 @@ export const RegistrationScreen = ({ navigation }) => {
               <Btn
                 title="Sign up"
                 onFormSubmit={handleFormSubmit}
-                form={form}
+                isDisable={isBtnDisable(form)}
+                style={{ marginTop: 43 }}
               />
             )}
             {!isKeyboardShown && (

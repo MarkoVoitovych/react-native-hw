@@ -3,13 +3,14 @@ import { TextRobotoRegular } from './TextRobotoRegular';
 import colors from '../../assets/colors';
 
 export const Btn = (props) => {
-  const { title, onFormSubmit, isDisable = false } = props;
+  const { title, style, onFormSubmit, isDisable = false } = props;
 
   return (
     <Pressable
       disabled={isDisable}
       style={{
         ...styles.button,
+        ...style,
         backgroundColor: isDisable ? colors.SECONDARY_BG : colors.ACCENT_COLOR,
       }}
       onPress={onFormSubmit}
@@ -32,7 +33,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 51,
     borderRadius: 100,
-    marginTop: 43,
   },
   title: {
     fontSize: 16,

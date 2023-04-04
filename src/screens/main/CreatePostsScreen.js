@@ -1,150 +1,82 @@
 import { useEffect, useState } from 'react';
 import {
   StyleSheet,
-  TouchableOpacity,
   View,
-  Image,
-  Text,
+  useWindowDimensions,
+  ImageBackground,
   Pressable,
   KeyboardAvoidingView,
   TextInput,
 } from 'react-native';
-import { Camera, CameraType } from 'expo-camera';
+import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
-import {
-  Feather,
-  FontAwesome5,
-  Ionicons,
-  Entypo,
-  MaterialIcons,
-} from '@expo/vector-icons';
-import { useWindowDimensions } from 'react-native';
+import { Feather, FontAwesome5 } from '@expo/vector-icons';
 
+import { CameraScreen } from './CameraScreen';
 import common from '../../components/common';
 import colors from '../../assets/colors';
-import { ImageBackground } from 'react-native';
-import { TextRobotoRegular } from '../../components/common/TextRobotoRegular';
+import { pickImage } from '../../utils/pickImage';
+import { isBtnDisable } from '../../utils/isBtnDisable';
 
-const { MainContainer, CameraBtn, Btn } = common;
+const { MainContainer, Btn, TextRobotoRegular } = common;
 const initState = {
-  imageUrl: '',
+  imageUrl: null,
   name: '',
   locality: '',
 };
 
-export default CreatePostsScreen = ({}) => {
-  const [cameraRef, setCameraRef] = useState(null);
-  const [type, setType] = useState(CameraType.back);
+export default CreatePostsScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraStatus, setCameraStatus] = useState(false);
-  const [photo, setPhoto] = useState('');
   const [form, setForm] = useState(initState);
 
+  const { imageUrl: photo } = form;
   const { width: deviceWidth, height: deviceHeight } = useWindowDimensions();
-
-  const createPhoto = async () => {
-    const takenPhoto = await cameraRef.takePictureAsync();
-    setPhoto(takenPhoto.uri); // DELETE
-    setForm((prev) => ({ ...prev, imageUrl: takenPhoto.uri }));
-  };
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       await MediaLibrary.requestPermissionsAsync();
-
       setHasPermission(status === 'granted');
     })();
   }, []);
 
-  const onFormSubmit = () => {
-    setForm(initState);
-  };
+  if (hasPermission === null) {
+    return (
+      <View>
+        <TextRobotoRegular>No access to camera</TextRobotoRegular>
+      </View>
+    );
+  }
+  if (hasPermission === false) {
+    return (
+      <View>
+        <TextRobotoRegular>No access to camera</TextRobotoRegular>
+      </View>
+    );
+  }
 
   return (
     <MainContainer style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
       >
-        {cameraStatus && photo && (
-          <View style={styles.takePhotoContainer}>
-            <ImageBackground
-              source={{ uri: photo }}
-              style={{
-                ...styles.takePhotoImg,
-                height: deviceHeight - 60,
-                width: deviceWidth,
-              }}
-            >
-              <TouchableOpacity
-                style={styles.choosePhotoBtn}
-                onPress={() => {
-                  setCameraStatus(false);
-                }}
-              >
-                <MaterialIcons
-                  name="add-photo-alternate"
-                  size={32}
-                  color="white"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.choosePhotoBtn}
-                onPress={() => {
-                  setPhoto(null);
-                }}
-              >
-                <Entypo name="back" size={32} color="white" />
-              </TouchableOpacity>
-            </ImageBackground>
-          </View>
-        )}
-        {cameraStatus && !photo && (
-          <Camera
-            style={{ ...styles.camera, height: deviceHeight - 60 }}
-            ref={setCameraRef}
-            type={type}
-          >
-            <View style={{ ...styles.photoView, width: deviceWidth }}>
-              <TouchableOpacity
-                onPress={() => {
-                  setType(
-                    type === CameraType.back
-                      ? CameraType.front
-                      : CameraType.back
-                  );
-                }}
-              >
-                <Ionicons
-                  name="camera-reverse-outline"
-                  size={34}
-                  color="white"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={async () => {
-                  if (cameraRef) {
-                    await createPhoto();
-                  }
-                }}
-              >
-                <CameraBtn />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  setPhoto(null);
-                  setCameraStatus(false);
-                }}
-              >
-                <Feather name="camera-off" size={28} color="white" />
-              </TouchableOpacity>
-            </View>
-          </Camera>
-        )}
-
+        <CameraScreen
+          cameraStatus={cameraStatus}
+          photo={form.imageUrl}
+          setCameraStatus={setCameraStatus}
+          setForm={setForm}
+          deviceWidth={deviceWidth}
+          deviceHeight={deviceHeight}
+        />
         {!cameraStatus && (
-          <View style={styles.form}>
+          <View
+            style={{
+              ...styles.form,
+              width: deviceWidth,
+              height: deviceHeight - 115,
+            }}
+          >
             <View
               style={{
                 ...styles.photoWrap,
@@ -169,7 +101,7 @@ export default CreatePostsScreen = ({}) => {
                   }}
                   accessibilityLabel={'Add picture'}
                   onPress={() => {
-                    setPhoto(null);
+                    setForm((prev) => ({ ...prev, imageUrl: null }));
                     setCameraStatus(true);
                   }}
                 >
@@ -183,11 +115,20 @@ export default CreatePostsScreen = ({}) => {
                 </Pressable>
               </ImageBackground>
             </View>
-            <View style={styles.addPhotoTextWrap}>
+            <Pressable
+              style={styles.addPhotoTextWrap}
+              onPress={async () => {
+                let result = await pickImage();
+                setForm((prev) => ({
+                  ...prev,
+                  imageUrl: result.assets[0].uri,
+                }));
+              }}
+            >
               <TextRobotoRegular style={styles.addPhotoText}>
                 {photo ? 'Edit photo' : 'Download photo'}
               </TextRobotoRegular>
-            </View>
+            </Pressable>
             <View
               style={{
                 ...styles.inputContanier,
@@ -205,7 +146,7 @@ export default CreatePostsScreen = ({}) => {
                 }
               />
             </View>
-            <View style={styles.inputContanier}>
+            <View style={{ ...styles.inputContanier, marginBottom: 32 }}>
               <Feather
                 name="map-pin"
                 size={24}
@@ -224,12 +165,18 @@ export default CreatePostsScreen = ({}) => {
             </View>
             <Btn
               title={'Publish'}
-              onFormSubmit={onFormSubmit}
-              isDisable={false}
+              onFormSubmit={() => {
+                setForm(initState);
+                navigation.navigate('Posts');
+              }}
+              isDisable={isBtnDisable(form)}
             />
             <Pressable
-              style={styles.deleteBtn}
-              onPress={() => setForm(initState)}
+              style={{ ...styles.deleteBtn, left: deviceWidth / 2 - 16 - 20 }}
+              onPress={() => {
+                setForm(initState);
+                navigation.navigate('Posts');
+              }}
             >
               <Feather
                 name="trash-2"
@@ -247,51 +194,6 @@ export default CreatePostsScreen = ({}) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'flex-start',
-  },
-  camera: {
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  takePhotoContainer: {
-    // position: 'absolute',
-    zIndex: 1,
-  },
-  takePhotoImg: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'flex-end',
-    paddingBottom: 20,
-  },
-  photoView: {
-    flexDirection: 'row',
-    backgroundColor: 'transparent',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  button: { alignSelf: 'center' },
-  takePhotoOut: {
-    borderWidth: 2,
-    borderColor: 'white',
-    height: 50,
-    width: 50,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 50,
-  },
-  takePhotoInner: {
-    borderWidth: 2,
-    borderColor: 'white',
-    height: 40,
-    width: 40,
-    backgroundColor: 'white',
-    borderRadius: 50,
-  },
-  choosePhotoBtn: {
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   form: {
     paddingHorizontal: 16,
@@ -311,7 +213,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'transparent',
-    borderBottomColor: '#E8E8E8',
+    borderBottomColor: colors.BORDER_COLOR,
     height: 50,
     backgroundColor: 'transparent',
     width: '100%',
@@ -320,25 +222,18 @@ const styles = StyleSheet.create({
     fontFamily: 'roboto-regular',
     fontSize: 16,
     lineHeight: 19,
-    color: '#212121',
+    color: colors.PRIMARY_TEXT_COLOR,
     width: '100%',
   },
-  formBtn: {
-    padding: 16,
-    borderRadius: 100,
-    marginTop: 32,
-    width: 343,
-  },
   deleteBtn: {
+    position: 'absolute',
+    bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: colors.SECONDARY_BG,
     borderRadius: 20,
-    marginTop: 'auto',
     width: 70,
     height: 40,
-    marginLeft: 'auto',
-    marginRight: 'auto',
   },
   addPhotoIconWrap: {
     width: 60,
