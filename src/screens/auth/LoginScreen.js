@@ -14,6 +14,7 @@ import colors from '../../assets/colors';
 import smallDevice from '../../utils/smallDeviceDimens';
 import common from '../../components/common';
 import { ScrollView } from 'react-native-gesture-handler';
+import { isBtnDisable } from '../../utils/isBtnDisable';
 
 const {
   TextRobotoMedium,
@@ -88,7 +89,8 @@ export const LoginScreen = ({ navigation }) => {
                 <Btn
                   title="Log in"
                   onFormSubmit={handleFormSubmit}
-                  form={form}
+                  isDisable={isBtnDisable(form)}
+                  style={{ marginTop: 43 }}
                 />
               )}
               {!isKeyboardShown && (

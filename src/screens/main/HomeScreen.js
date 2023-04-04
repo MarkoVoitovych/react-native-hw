@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 
 import PostsScreen from './PostsScreen';
 import CreatePostsScreen from './CreatePostsScreen';
@@ -43,8 +43,11 @@ export const HomeScreen = ({ navigation }) => {
             ),
             title: 'Posts',
             headerTitleAlign: 'center',
-            headerRight: ({ navigation }) => (
-              <TouchableOpacity style={{ paddingRight: 16 }}>
+            headerRight: () => (
+              <TouchableOpacity
+                style={{ paddingRight: 16 }}
+                onPress={() => navigation.navigate('Login')}
+              >
                 <Feather
                   name="log-out"
                   size={24}
@@ -68,10 +71,10 @@ export const HomeScreen = ({ navigation }) => {
                 style={{ paddingLeft: 16 }}
                 onPress={() => navigation.navigate('Posts')}
               >
-                <Feather
-                  name="arrow-left"
+                <MaterialIcons
+                  name="keyboard-backspace"
                   size={24}
-                  color={colors.SECONDARY_TEXT_COLOR}
+                  color={colors.PRIMARY_TEXT_COLOR}
                 />
               </TouchableOpacity>
             ),

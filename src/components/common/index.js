@@ -5,6 +5,7 @@ import { TextRobotoBold } from './TextRobotoBold';
 import { TextRobotoMedium } from './TextRobotoMedium';
 import { TextRobotoRegular } from './TextRobotoRegular';
 import { MainContainer } from './MainContainer';
+import { CameraBtn } from './CameraBtn';
 
 export default common = {
   Btn,
@@ -14,4 +15,5 @@ export default common = {
   TextRobotoMedium,
   TextRobotoRegular,
   MainContainer,
+  CameraBtn,
 };
