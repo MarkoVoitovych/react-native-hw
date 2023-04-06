@@ -16,7 +16,10 @@ export const AddAvatar = (props) => {
           accessibilityLabel={'Add avatar'}
           onPress={async () => {
             const result = await pickImage();
-            setForm((prev) => ({ ...prev, avatarUrl: result.assets[0].uri }));
+            setForm((prev) => ({
+              ...prev,
+              avatarUrl: result?.assets[0].uri || null,
+            }));
           }}
         >
           <Image

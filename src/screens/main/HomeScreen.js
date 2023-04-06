@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
+import { useDispatch } from 'react-redux';
 
 import PostsScreen from './PostsScreen';
 import CreatePostsScreen from './CreatePostsScreen';
@@ -9,11 +10,14 @@ import CommentsScreen from '../nestedScreens/CommentsScreen';
 import MapScreen from '../nestedScreens/MapScreen';
 import common from '../../components/common';
 import colors from '../../assets/colors';
+import { authLogOut } from '../../redux/auth/authOperations';
 
 const { MainContainer } = common;
 const Tabs = createBottomTabNavigator();
 
 export const HomeScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   return (
     <MainContainer>
       <Tabs.Navigator
@@ -51,7 +55,7 @@ export const HomeScreen = ({ navigation }) => {
             headerRight: () => (
               <TouchableOpacity
                 style={{ paddingRight: 16 }}
-                onPress={() => navigation.navigate('Login')}
+                onPress={() => dispatch(authLogOut())}
               >
                 <Feather
                   name="log-out"

@@ -4,8 +4,8 @@ import colors from '../../assets/colors';
 import { TextRobotoRegular } from './TextRobotoRegular';
 
 export const Password = (props) => {
-  const { placeholder, onInputChange, onKeybordToggle, name, value } = props;
-  const [showPassword, setShowPassword] = useState(false);
+  const { placeholder, onInputChange, name, value } = props;
+  const [showPassword, setShowPassword] = useState(true);
   const [isOnFocus, setIsOnFocus] = useState(false);
 
   return (
@@ -27,11 +27,9 @@ export const Password = (props) => {
         placeholderTextColor={colors.SECONDARY_TEXT_COLOR}
         secureTextEntry={showPassword}
         onFocus={() => {
-          onKeybordToggle(true);
           setIsOnFocus(true);
         }}
         onBlur={() => {
-          onKeybordToggle(false);
           setIsOnFocus(false);
         }}
         onChangeText={(text) => onInputChange({ name, value: text })}

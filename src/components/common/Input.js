@@ -3,7 +3,7 @@ import { StyleSheet, TextInput } from 'react-native';
 import colors from '../../assets/colors';
 
 export const Input = (props) => {
-  const { placeholder, onInputChange, onKeybordToggle, name, value } = props;
+  const { placeholder, onInputChange, name, value } = props;
   const [isOnFocus, setIsOnFocus] = useState(false);
   return (
     <TextInput
@@ -14,11 +14,9 @@ export const Input = (props) => {
       placeholder={placeholder}
       placeholderTextColor={colors.SECONDARY_TEXT_COLOR}
       onFocus={() => {
-        onKeybordToggle(true);
         setIsOnFocus(true);
       }}
       onBlur={() => {
-        onKeybordToggle(false);
         setIsOnFocus(false);
       }}
       onChangeText={(text) => onInputChange({ name, value: text })}
