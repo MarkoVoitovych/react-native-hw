@@ -5,16 +5,17 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   Platform,
-  Keyboard,
   Pressable,
   useWindowDimensions,
 } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 import colors from '../../assets/colors';
 import common from '../../components/common';
 import smallDevice from '../../utils/smallDeviceDimens';
 import { AddAvatar } from '../../components/AddAvatar';
 import { isBtnDisable } from '../../utils/isBtnDisable';
+import { authSignUp } from '../../redux/auth/authOperations';
 
 const {
   TextRobotoMedium,
@@ -33,35 +34,31 @@ const initFormState = {
 };
 
 export const RegistrationScreen = ({ navigation }) => {
-  const [isKeyboardShown, setIsKeyboardShown] = useState(false);
   const [form, setForm] = useState(initFormState);
+  const dispatch = useDispatch();
 
   const { width: deviceWidth, height: deviceHeight } = useWindowDimensions();
 
   const handleInputChange = ({ name, value }) => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-  const handleKeybordToggle = (status) => {
-    setIsKeyboardShown(status);
-  };
   const handleFormSubmit = () => {
-    navigation.navigate('Home');
-    Keyboard.dismiss();
+    dispatch(authSignUp(form));
     setForm(initFormState);
   };
 
   return (
     <MainContainer>
-      <ImageBackground
-        style={{
-          ...styles.backgroundImage,
-          height: deviceHeight,
-          width: deviceWidth,
-        }}
-        source={require('../../assets/images/PhotoBG2x.jpg')}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        <ImageBackground
+          style={{
+            ...styles.backgroundImage,
+            height: deviceHeight,
+            width: deviceWidth,
+          }}
+          source={require('../../assets/images/PhotoBG2x.jpg')}
         >
           <View
             style={{
@@ -85,43 +82,38 @@ export const RegistrationScreen = ({ navigation }) => {
               value={form.login}
               placeholder="Login"
               onInputChange={handleInputChange}
-              onKeybordToggle={handleKeybordToggle}
             />
             <Input
               name={'email'}
               value={form.email}
               placeholder="E-mail address"
               onInputChange={handleInputChange}
-              onKeybordToggle={handleKeybordToggle}
             />
             <Password
               name={'password'}
               value={form.password}
               placeholder="Password"
               onInputChange={handleInputChange}
-              onKeybordToggle={handleKeybordToggle}
             />
-            {!isKeyboardShown && (
-              <Btn
-                title="Sign up"
-                onFormSubmit={handleFormSubmit}
-                isDisable={isBtnDisable(form)}
-                style={{ marginTop: 43 }}
-              />
-            )}
-            {!isKeyboardShown && (
-              <Pressable
-                style={styles.navWrapper}
-                onPress={() => navigation.navigate('Login')}
-              >
-                <TextRobotoRegular style={styles.navLink}>
-                  {'Already have an account? Log in'}
-                </TextRobotoRegular>
-              </Pressable>
-            )}
+
+            <Btn
+              title="Sign up"
+              onFormSubmit={handleFormSubmit}
+              isDisable={isBtnDisable(form)}
+              style={{ marginTop: 43 }}
+            />
+
+            <Pressable
+              style={styles.navWrapper}
+              onPress={() => navigation.navigate('Login')}
+            >
+              <TextRobotoRegular style={styles.navLink}>
+                {'Already have an account? Log in'}
+              </TextRobotoRegular>
+            </Pressable>
           </View>
-        </KeyboardAvoidingView>
-      </ImageBackground>
+        </ImageBackground>
+      </KeyboardAvoidingView>
     </MainContainer>
   );
 };
