@@ -1,5 +1,5 @@
-export const selectIsAuth = (state) => state.auth?.isAuth;
+export const selectIsAuth = (state) => state?.isAuth;
 
-export const selectUser = (state) => state.auth?.user;
+export const selectUser = (state) => state?.user;
 
-export const selectIsFetching = (state) => state.auth?.isFetching;
+export const selectIsFetching = (state) => state?.isFetching;

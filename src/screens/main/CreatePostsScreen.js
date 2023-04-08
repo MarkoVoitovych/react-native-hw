@@ -12,14 +12,14 @@ import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import * as Location from 'expo-location';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { CameraScreen } from './CameraScreen';
 import common from '../../components/common';
 import colors from '../../assets/colors';
 import { pickImage } from '../../utils/pickImage';
 import { isBtnDisable } from '../../utils/isBtnDisable';
-import { addPost } from '../../redux/dashboard/postOperations';
+import { addPost } from '../../services/firestoreOperations';
 import { selectUser } from '../../redux/auth/authSelector';
 
 const { MainContainer, Btn, TextRobotoRegular } = common;
@@ -37,7 +37,6 @@ export default CreatePostsScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraStatus, setCameraStatus] = useState(false);
   const [form, setForm] = useState(initState);
-  const dispatch = useDispatch();
   const { uid } = useSelector(selectUser);
 
   const { imageUrl: photo } = form;
@@ -58,10 +57,10 @@ export default CreatePostsScreen = ({ navigation }) => {
     }));
   };
 
-  const onFormSubmit = () => {
-    dispatch(addPost({ ...form, uid }));
-    // setForm(initState);
-    // navigation.navigate('Posts');
+  const onFormSubmit = async () => {
+    setForm(initState);
+    navigation.navigate('Posts');
+    await addPost({ ...form, uid });
   };
 
   useEffect(() => {
@@ -112,7 +111,7 @@ export default CreatePostsScreen = ({ navigation }) => {
                   width: deviceWidth - 32,
                   height: (deviceWidth - 32) * 0.7,
                 }}
-                source={{ uri: photo || null }}
+                source={{ uri: form.imageUrl || null }}
               >
                 <Pressable
                   style={{

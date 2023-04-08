@@ -22,6 +22,9 @@ export const authSlice = createSlice({
       state.user = payload.user;
       state.isAuth = payload.isAuth;
     },
+    setError: (state, { payload }) => {
+      state.error = payload;
+    },
   },
   extraReducers: (build) => {
     build
@@ -72,4 +75,4 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setUser } = authSlice.actions;
+export const { setUser, setError } = authSlice.actions;

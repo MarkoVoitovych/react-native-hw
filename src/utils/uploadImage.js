@@ -1,14 +1,11 @@
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../firebase/firebase.config';
-
-const DEFAULT_AVATAR_IMG =
-  'gs://markovoitovych-react-native-hw.appspot.com/avatars/defaultAvatar.jpg';
+import { DEFAULT_AVATAR_IMG } from '@env';
 
 export const uploadImage = async (uri, filePath) => {
   try {
     if (!uri) {
-      const url = await getDownloadURL(DEFAULT_AVATAR_IMG);
-      return url;
+      return DEFAULT_AVATAR_IMG;
     }
     const response = await fetch(uri).then((res) => res.blob());
     const imageRef = ref(storage, filePath);

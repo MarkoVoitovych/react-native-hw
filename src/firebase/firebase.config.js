@@ -2,9 +2,10 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 import { getFirestore } from 'firebase/firestore';
+import { FIREBASE_API_KEY } from '@env';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAzZeWe4tCvEtskhhi6NaTXWPlvpmYNXNQ',
+  apiKey: FIREBASE_API_KEY,
   authDomain: 'markovoitovych-react-native-hw.firebaseapp.com',
   projectId: 'markovoitovych-react-native-hw',
   storageBucket: 'gs://markovoitovych-react-native-hw.appspot.com',

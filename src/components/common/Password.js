@@ -32,7 +32,7 @@ export const Password = (props) => {
         onBlur={() => {
           setIsOnFocus(false);
         }}
-        onChangeText={(text) => onInputChange({ name, value: text })}
+        onChangeText={(text) => onInputChange({ name, value: text.trim() })}
         value={value}
         textContentType={'password'}
       />

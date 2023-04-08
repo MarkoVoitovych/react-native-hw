@@ -29,7 +29,9 @@ const App = () => {
           email: user.email,
           login: user.displayName,
         };
-        dispatch(setUser({ user: currentUser, isAuth: true }));
+        setTimeout(() => {
+          dispatch(setUser({ user: currentUser, isAuth: true }));
+        }, 0);
       }
     });
   }, []);

@@ -19,7 +19,12 @@ export const Input = (props) => {
       onBlur={() => {
         setIsOnFocus(false);
       }}
-      onChangeText={(text) => onInputChange({ name, value: text })}
+      onChangeText={(text) =>
+        onInputChange({
+          name,
+          value: text,
+        })
+      }
       value={value}
       keyboardType={name === 'email' ? 'email-address' : 'default'}
     />

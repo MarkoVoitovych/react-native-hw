@@ -15,7 +15,7 @@ export const authSignUp = createAsyncThunk(
       const { email, password, avatarUrl, login } = form;
       const { user } = await createUserWithEmailAndPassword(
         auth,
-        email,
+        email.toLowerCase(),
         password
       );
 
@@ -45,7 +45,7 @@ export const authSignIn = createAsyncThunk(
       const { email: userEmail, password } = user;
       const userCredential = await signInWithEmailAndPassword(
         auth,
-        userEmail,
+        userEmail.toLowerCase(),
         password
       );
       const {
