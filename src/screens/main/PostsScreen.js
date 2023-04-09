@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   StyleSheet,
   Image,
@@ -12,12 +12,11 @@ import {
 import { EvilIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
-import { firestore } from '../../firebase/firebase.config';
 import common from '../../components/common';
 import { getOwnPosts } from '../../services/firestoreOperations';
 import { selectUser } from '../../redux/auth/authSelector';
 
-const { MainContainer, TextRobotoRegular } = common;
+const { MainContainer, TextRobotoRegular, TextRobotoBold } = common;
 
 export default PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
@@ -36,8 +35,8 @@ export default PostsScreen = ({ navigation }) => {
           style={{ width: 60, height: 60, borderRadius: 16, marginRight: 8 }}
         />
         <View>
-          <Text>{user.login}</Text>
-          <Text>{user.email}</Text>
+          <TextRobotoBold>{user.login}</TextRobotoBold>
+          <TextRobotoRegular>{user.email}</TextRobotoRegular>
         </View>
       </View>
       <FlatList
@@ -71,36 +70,33 @@ export default PostsScreen = ({ navigation }) => {
                     name="comment"
                     size={32}
                     style={{
-                      color: '#FF6C00',
-                      // color: commentsNum[item.postId] ? '#FF6C00' : '#BDBDBD',
+                      color: item.comments ? '#FF6C00' : '#BDBDBD',
                     }}
                   />
                   <Text
                     style={{
-                      // color: commentsNum[item.postId] ? '#212121' : '#BDBDBD',
-                      color: '#212121',
+                      color: item.comments ? '#212121' : '#BDBDBD',
                     }}
                   >
-                    {/* {commentsNum[item.postId] || 0} */}
-                    {'000'}
+                    {item.comments}
                   </Text>
                 </Pressable>
-                <Feather
-                  name="map-pin"
-                  size={24}
-                  color="#BDBDBD"
-                  style={{ marginRight: 3 }}
-                />
-                <Text
-                  style={styles.textLocation}
+                <Pressable
+                  style={styles.mapWrap}
                   onPress={() =>
                     navigation.navigate('Map', {
                       coords: item.coords,
                     })
                   }
                 >
-                  {item.locality}
-                </Text>
+                  <Feather
+                    name="map-pin"
+                    size={24}
+                    color="#BDBDBD"
+                    style={{ marginRight: 3 }}
+                  />
+                  <Text style={styles.textLocation}>{item.locality}</Text>
+                </Pressable>
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -113,7 +109,6 @@ export default PostsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
     paddingHorizontal: 16,
     backgroundColor: '#ffffff',
   },
@@ -127,6 +122,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 8,
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   commentInfo: {
     flexDirection: 'row',
@@ -148,5 +144,9 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: '#212121',
     marginTop: 8,
+  },
+  mapWrap: {
+    flexDirection: 'row',
+    marginRight: 20,
   },
 });

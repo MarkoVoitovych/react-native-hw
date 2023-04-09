@@ -6,6 +6,7 @@ import {
   query,
   where,
   orderBy,
+  getCountFromServer,
 } from 'firebase/firestore';
 
 import { firestore } from '../firebase/firebase.config';
@@ -39,10 +40,19 @@ export const getPosts = ({ callback }) => {
     const queryPosts = query(postsRef, orderBy('createdAt', 'desc'));
     const unsuscribe = onSnapshot(queryPosts, (snapshot) => {
       const posts = [];
-      snapshot.forEach((doc) => {
+      snapshot.forEach(async (doc) => {
+        const commentsRef = collection(
+          firestore,
+          'publications',
+          `${doc.id}`,
+          'comments'
+        );
+        const result = await getCountFromServer(commentsRef);
+        const comments = result.data().count || 0;
         posts.push({
           ...doc.data(),
           id: doc.id,
+          comments,
         });
       });
       callback(posts);
@@ -63,10 +73,19 @@ export const getOwnPosts = ({ callback, uid }) => {
     );
     const unsuscribe = onSnapshot(queryPosts, (snapshot) => {
       const posts = [];
-      snapshot.forEach((doc) => {
+      snapshot.forEach(async (doc) => {
+        const commentsRef = collection(
+          firestore,
+          'publications',
+          `${doc.id}`,
+          'comments'
+        );
+        const result = await getCountFromServer(commentsRef);
+        const comments = result.data().count || 0;
         posts.push({
           ...doc.data(),
           id: doc.id,
+          comments,
         });
       });
       callback(posts);

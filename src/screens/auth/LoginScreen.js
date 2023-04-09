@@ -9,7 +9,7 @@ import {
   useWindowDimensions,
   ScrollView,
 } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import colors from '../../assets/colors';
 import smallDevice from '../../utils/smallDeviceDimens';
