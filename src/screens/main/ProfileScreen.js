@@ -86,18 +86,23 @@ export default ProfileScreen = ({ navigation }) => {
                         name="comment"
                         size={32}
                         style={{
-                          color: '#BDBDBD',
+                          color: item.comments ? '#FF6C00' : '#BDBDBD',
                         }}
                       />
                       <Text
                         style={{
-                          color: '#BDBDBD',
+                          color: item.comments ? '#212121' : '#BDBDBD',
                         }}
                       >
-                        {'000'}
+                        {item.comments}
                       </Text>
                     </Pressable>
-                    <View
+                    <Pressable
+                      onPress={() =>
+                        navigation.navigate('Map', {
+                          coords: item.coords,
+                        })
+                      }
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -110,17 +115,8 @@ export default ProfileScreen = ({ navigation }) => {
                         color="#BDBDBD"
                         style={{ marginRight: 3 }}
                       />
-                      <Text
-                        style={styles.textLocation}
-                        onPress={() =>
-                          navigation.navigate('Map', {
-                            coords: item.coords,
-                          })
-                        }
-                      >
-                        {item.locality}
-                      </Text>
-                    </View>
+                      <Text style={styles.textLocation}>{item.locality}</Text>
+                    </Pressable>
                   </View>
                 </View>
               </TouchableWithoutFeedback>
@@ -135,7 +131,7 @@ export default ProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   containerMain: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: '#ecf0f1',
   },
   container: {

@@ -57,13 +57,6 @@ export default CommentsScreen = ({ route }) => {
           <FlatList
             data={comments}
             keyExtractor={(item) => item.id}
-            ListEmptyComponent={
-              <View style={styles.emptyMessageBox}>
-                <Text style={styles.emptyMessageStyle}>
-                  No comments added yet...
-                </Text>
-              </View>
-            }
             renderItem={({ item }) => (
               <TouchableWithoutFeedback>
                 <View
@@ -137,6 +130,7 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     paddingBottom: 16,
     alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   imageWrapper: {
     alignItems: 'center',
